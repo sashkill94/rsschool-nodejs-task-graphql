@@ -1,12 +1,12 @@
 import { MemberTypeType, memberTypeId } from "../types/types.graphql.js";
 import { getMemberType, getMemberTypes } from "../resolvers/member-types.resolvers.js";
-import { GraphQLObjectType } from "graphql";
+import { GraphQLList, GraphQLObjectType } from "graphql";
 
 export const query = new GraphQLObjectType({
   name: 'Query',
   fields: {
     memberTypes: {
-      type: MemberTypeType,
+      type: new GraphQLList(MemberTypeType),
       resolve: getMemberTypes,
     },
     memberType: {

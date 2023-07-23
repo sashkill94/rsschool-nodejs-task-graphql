@@ -6,6 +6,8 @@ export const getMemberTypes = async (
   args: unknown,
   fastify: FastifyInstance,
 ): Promise<MemberType[]> => {
+  const types =  await fastify.prisma.memberType.findMany();
+  console.log(types)
   return await fastify.prisma.memberType.findMany();
 };
 
