@@ -1,7 +1,8 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { findMemberTypeByProfile } from "../resolvers/member-types.resolvers.js";
 import { getPostsFromUser } from "../resolvers/posts.resolvers.js";
 import { getProfileFromUser } from "../resolvers/profile.resolvers.js";
-import { getSubscribedToUser, getUserSubscribedTo } from "../resolvers/user.resolvers.js";
+import { findUserByPost, findUserByProfile, getSubscribedToUser, getUserSubscribedTo } from "../resolvers/user.resolvers.js";
 import { UUIDType } from "./uuid.js";
 
 export const memberTypeId = new GraphQLEnumType({
@@ -46,6 +47,10 @@ export const PostType = new GraphQLObjectType({
     authorId: {
       type: UUIDType,
     },
+    author: {
+      type: UserType,
+      resolve: findUserByPost
+    },
   }),
 })
 
@@ -68,7 +73,15 @@ export const ProfileType = new GraphQLObjectType({
     },
     memberTypeId: {
       type: memberTypeId
-    }
+    },
+    user: {
+      type: UserType,
+      resolve: findUserByProfile
+    },
+    memberType: {
+      type: MemberTypeType,
+      resolve: findMemberTypeByProfile
+    },
   })
 })
 

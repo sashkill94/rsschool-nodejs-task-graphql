@@ -4,7 +4,7 @@ import {
   simplifyParsedResolveInfoFragmentWithType,
   ResolveTree,
 } from 'graphql-parse-resolve-info';
-import { Context, User } from '../types/types.js';
+import { Context, Post, Profile, User } from '../types/types.js';
 
 export const getUser = async (
   parent: unknown,
@@ -48,10 +48,10 @@ export const getSubscribedToUser = async (
   { dataLoaders }: Context,
   info: GraphQLResolveInfo,
 ) => {
-  const { userSubscribedTo } = parent;
-  if (Array.isArray(userSubscribedTo) && userSubscribedTo.length > 0) {
+  const { subscribedToUser } = parent;
+  if (Array.isArray(subscribedToUser) && subscribedToUser.length > 0) {
     return await dataLoaders.userLoader.loadMany(
-      userSubscribedTo.map((user) => user.authorId),
+      subscribedToUser.map((user) => user.subscriberId),
     );
   }
   return [];
@@ -63,11 +63,33 @@ export const getUserSubscribedTo = async (
   { dataLoaders }: Context,
   info: GraphQLResolveInfo,
 ) => {
-  const { subscribedToUser } = parent;
-  if (Array.isArray(subscribedToUser) && subscribedToUser.length > 0) {
+  const { userSubscribedTo } = parent;
+  if (Array.isArray(userSubscribedTo) && userSubscribedTo.length > 0) {
     return await dataLoaders.userLoader.loadMany(
-      subscribedToUser.map((user) => user.subscriberId),
+      userSubscribedTo.map((user) => user.authorId),
     );
   }
   return [];
 };
+
+export const findUserByProfile = async (
+  parent: Profile,
+  args: unknown,
+  { dataLoaders }: Context,
+  info: GraphQLResolveInfo,
+) => {
+  const id: string = parent.userId;
+  return await dataLoaders.userLoader.load(id);
+}
+
+export const findUserByPost = async (
+  parent: Post,
+  args: unknown,
+  { dataLoaders }: Context,
+  info: GraphQLResolveInfo,
+) => {
+  const id: string = parent.authorId;
+  return await dataLoaders.userLoader.load(id);
+}
+
+

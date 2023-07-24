@@ -1,4 +1,4 @@
-import { MemberType } from "@prisma/client";
+import { MemberType, Profile } from "@prisma/client";
 import { Context } from "../types/types.js";
 
 export const getMemberTypes = async (
@@ -22,3 +22,12 @@ export const getMemberType = async (parent: unknown,
     },
   });
 };
+
+export const findMemberTypeByProfile =  async (
+  parent: Profile,
+  args: unknown,
+  { dataLoaders }: Context,
+) => {
+  const id: string = parent.memberTypeId;
+  return await dataLoaders.memberTypeLoader.load(id);
+}
