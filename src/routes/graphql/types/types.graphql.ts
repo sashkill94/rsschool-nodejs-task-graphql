@@ -1,4 +1,5 @@
-import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLObjectType } from "graphql";
+import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { UUIDType } from "./uuid.js";
 
 export const memberTypeId = new GraphQLEnumType({
   name: 'MemberTypeId',
@@ -26,3 +27,23 @@ export const MemberTypeType = new GraphQLObjectType({
     },
   }),
 });
+
+export const PostType = new GraphQLObjectType({
+  name: 'PostType',
+  fields: () => ({
+    id: {
+      type: UUIDType,
+    },
+    title: {
+      type: GraphQLString,
+    },
+    content: {
+      type: GraphQLString,
+    },
+    authorId: {
+      type: UUIDType,
+    },
+  }),
+})
+
+export const PostsType = new GraphQLList(PostType);
