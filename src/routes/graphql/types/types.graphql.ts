@@ -1,4 +1,4 @@
-import { GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
 import { UUIDType } from "./uuid.js";
 
 export const memberTypeId = new GraphQLEnumType({
@@ -47,3 +47,26 @@ export const PostType = new GraphQLObjectType({
 })
 
 export const PostsType = new GraphQLList(PostType);
+
+export const ProfileType = new GraphQLObjectType({
+  name: 'ProfileType',
+  fields: () => ({
+    id: {
+      type: UUIDType,
+    },
+    isMale: {
+      type: GraphQLBoolean,
+    },
+    yearOfBirth: {
+      type: GraphQLInt,
+    },
+    userId: {
+      type: UUIDType,
+    },
+    memberTypeId: {
+      type: memberTypeId
+    }
+  })
+})
+
+export const ProfileTypes = new GraphQLList(ProfileType);
