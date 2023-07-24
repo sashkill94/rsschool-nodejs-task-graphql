@@ -1,4 +1,7 @@
 import { GraphQLBoolean, GraphQLEnumType, GraphQLFloat, GraphQLInt, GraphQLList, GraphQLObjectType, GraphQLString } from "graphql";
+import { getPostsFromUser } from "../resolvers/posts.resolvers.js";
+import { getProfileFromUser } from "../resolvers/profile.resolvers.js";
+import { getSubscribedToUser, getUserSubscribedTo } from "../resolvers/user.resolvers.js";
 import { UUIDType } from "./uuid.js";
 
 export const memberTypeId = new GraphQLEnumType({
@@ -29,7 +32,7 @@ export const MemberTypeType = new GraphQLObjectType({
 });
 
 export const PostType = new GraphQLObjectType({
-  name: 'PostType',
+  name: 'Post',
   fields: () => ({
     id: {
       type: UUIDType,
@@ -49,7 +52,7 @@ export const PostType = new GraphQLObjectType({
 export const PostsType = new GraphQLList(PostType);
 
 export const ProfileType = new GraphQLObjectType({
-  name: 'ProfileType',
+  name: 'Profile',
   fields: () => ({
     id: {
       type: UUIDType,
@@ -70,3 +73,36 @@ export const ProfileType = new GraphQLObjectType({
 })
 
 export const ProfileTypes = new GraphQLList(ProfileType);
+
+export const UserType: GraphQLObjectType = new GraphQLObjectType({
+  name: 'User',
+  fields: () => ({
+    id: {
+      type: UUIDType,
+    },
+    name: {
+      type: GraphQLString,
+    },
+    balance: {
+      type: GraphQLFloat,
+    },
+    profile: {
+      type: ProfileType,
+      resolve: getProfileFromUser,
+    },
+    posts: {
+      type: PostsType,
+      resolve: getPostsFromUser,
+    },
+    subscribedToUser: {
+      type: UsersType,
+      resolve: getSubscribedToUser,
+    },
+    userSubscribedTo: {
+      type: UsersType,
+      resolve: getUserSubscribedTo,
+    },
+  }),
+});
+
+export const UsersType = new GraphQLList(UserType);

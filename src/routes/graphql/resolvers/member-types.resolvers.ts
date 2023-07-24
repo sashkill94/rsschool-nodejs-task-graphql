@@ -1,10 +1,10 @@
 import { MemberType } from "@prisma/client";
-import { FastifyInstance } from "fastify";
+import { Context } from "../types/types.js";
 
 export const getMemberTypes = async (
   parent: unknown,
   args: unknown,
-  fastify: FastifyInstance,
+  { fastify }: Context,
 ): Promise<MemberType[]> => {
   const types =  await fastify.prisma.memberType.findMany();
   console.log(types)
@@ -13,7 +13,7 @@ export const getMemberTypes = async (
 
 export const getMemberType = async (parent: unknown,
   args: { id: string },
-  fastify: FastifyInstance,
+  { fastify }: Context,
 ): Promise<MemberType | null> => {
   const { id } = args;
   return await fastify.prisma.memberType.findUnique({
